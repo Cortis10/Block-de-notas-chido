@@ -191,7 +191,7 @@ namespace Block_de_notas_chdo
 
         private void guardarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            guardar();   
         }
 
         private void salirToolStripMenuItem_Click(object sender, EventArgs e)
@@ -238,5 +238,62 @@ namespace Block_de_notas_chdo
                 }
             }
         }
+
+        private void Guardar_Icono_Click(object sender, EventArgs e)
+        {
+            guardar();
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+
+            // 2. Si hay una pestaña abierta y tiene historial para deshacer, hacemos el Undo
+            if (rtbActual != null && rtbActual.CanUndo)
+            {
+                rtbActual.Undo();
+            }
+
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+
+            if (rtbActual != null && rtbActual.CanRedo)
+            {
+                rtbActual.Redo();
+            }
+        }
+
+        private void cortar_Click(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+            if (rtbActual != null && rtbActual.SelectionLength > 0)
+            {
+                rtbActual.Cut(); // Corta el texto seleccionado y lo manda al portapapeles
+            }
+        }
+
+        private void toolStripButton2_Click_1(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+            if (rtbActual != null && rtbActual.SelectionLength > 0)
+            {
+                rtbActual.Copy(); // Copia el texto seleccionado al portapapeles
+            }
+        }
+
+        private void Pegar_Click(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+
+            // Verifica que haya una pestaña abierta y que el portapapeles de Windows tenga texto para pegar
+            if (rtbActual != null && Clipboard.ContainsText())
+            {
+                rtbActual.Paste(); // Pega el texto en la posición del cursor
+            }
+        }
+
     }
 }

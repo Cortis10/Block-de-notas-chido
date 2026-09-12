@@ -39,9 +39,17 @@
             this.guardarComoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cerrarPestañaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.Guardar_Icono = new System.Windows.Forms.ToolStripButton();
+            this.cntrlX = new System.Windows.Forms.ToolStripButton();
+            this.CntrlY = new System.Windows.Forms.ToolStripButton();
+            this.cortar = new System.Windows.Forms.ToolStripButton();
+            this.copiar = new System.Windows.Forms.ToolStripButton();
+            this.Pegar = new System.Windows.Forms.ToolStripButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // richTextBox1
@@ -91,54 +99,129 @@
             // nuevaPestañaToolStripMenuItem
             // 
             this.nuevaPestañaToolStripMenuItem.Name = "nuevaPestañaToolStripMenuItem";
-            this.nuevaPestañaToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.nuevaPestañaToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
             this.nuevaPestañaToolStripMenuItem.Text = "Nueva Pestaña";
             this.nuevaPestañaToolStripMenuItem.Click += new System.EventHandler(this.nuevaPestañaToolStripMenuItem_Click_1);
             // 
             // abrirToolStripMenuItem
             // 
             this.abrirToolStripMenuItem.Name = "abrirToolStripMenuItem";
-            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
             this.abrirToolStripMenuItem.Text = "Abrir";
             this.abrirToolStripMenuItem.Click += new System.EventHandler(this.abrirToolStripMenuItem_Click);
             // 
             // guardarToolStripMenuItem
             // 
             this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
             this.guardarToolStripMenuItem.Text = "Guardar";
             this.guardarToolStripMenuItem.Click += new System.EventHandler(this.guardarToolStripMenuItem_Click);
             // 
             // guardarComoToolStripMenuItem
             // 
             this.guardarComoToolStripMenuItem.Name = "guardarComoToolStripMenuItem";
-            this.guardarComoToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.guardarComoToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
             this.guardarComoToolStripMenuItem.Text = "Guardar como";
             this.guardarComoToolStripMenuItem.Click += new System.EventHandler(this.guardarComoToolStripMenuItem_Click_1);
             // 
             // cerrarPestañaToolStripMenuItem
             // 
             this.cerrarPestañaToolStripMenuItem.Name = "cerrarPestañaToolStripMenuItem";
-            this.cerrarPestañaToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.cerrarPestañaToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
             this.cerrarPestañaToolStripMenuItem.Text = "Cerrar Pestaña";
             this.cerrarPestañaToolStripMenuItem.Click += new System.EventHandler(this.cerrarPestañaToolStripMenuItem_Click);
             // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
             this.salirToolStripMenuItem.Text = "Salir";
             this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Guardar_Icono,
+            this.cntrlX,
+            this.CntrlY,
+            this.cortar,
+            this.copiar,
+            this.Pegar});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 28);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(985, 27);
+            this.toolStrip1.TabIndex = 5;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // Guardar_Icono
+            // 
+            this.Guardar_Icono.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.Guardar_Icono.Image = ((System.Drawing.Image)(resources.GetObject("Guardar_Icono.Image")));
+            this.Guardar_Icono.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Guardar_Icono.Name = "Guardar_Icono";
+            this.Guardar_Icono.Size = new System.Drawing.Size(29, 24);
+            this.Guardar_Icono.Click += new System.EventHandler(this.Guardar_Icono_Click);
+            // 
+            // cntrlX
+            // 
+            this.cntrlX.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cntrlX.Image = ((System.Drawing.Image)(resources.GetObject("cntrlX.Image")));
+            this.cntrlX.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cntrlX.Name = "cntrlX";
+            this.cntrlX.Size = new System.Drawing.Size(29, 24);
+            this.cntrlX.Text = "toolStripButton2";
+            this.cntrlX.Click += new System.EventHandler(this.toolStripButton2_Click);
+            // 
+            // CntrlY
+            // 
+            this.CntrlY.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.CntrlY.Image = ((System.Drawing.Image)(resources.GetObject("CntrlY.Image")));
+            this.CntrlY.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CntrlY.Name = "CntrlY";
+            this.CntrlY.Size = new System.Drawing.Size(29, 24);
+            this.CntrlY.Text = "toolStripButton3";
+            this.CntrlY.Click += new System.EventHandler(this.toolStripButton3_Click);
+            // 
+            // cortar
+            // 
+            this.cortar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cortar.Image = ((System.Drawing.Image)(resources.GetObject("cortar.Image")));
+            this.cortar.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cortar.Name = "cortar";
+            this.cortar.Size = new System.Drawing.Size(29, 24);
+            this.cortar.Text = "toolStripButton1";
+            this.cortar.Click += new System.EventHandler(this.cortar_Click);
+            // 
+            // copiar
+            // 
+            this.copiar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.copiar.Image = ((System.Drawing.Image)(resources.GetObject("copiar.Image")));
+            this.copiar.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.copiar.Name = "copiar";
+            this.copiar.Size = new System.Drawing.Size(29, 24);
+            this.copiar.Text = "toolStripButton2";
+            this.copiar.Click += new System.EventHandler(this.toolStripButton2_Click_1);
+            // 
+            // Pegar
+            // 
+            this.Pegar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.Pegar.Image = ((System.Drawing.Image)(resources.GetObject("Pegar.Image")));
+            this.Pegar.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Pegar.Name = "Pegar";
+            this.Pegar.Size = new System.Drawing.Size(29, 24);
+            this.Pegar.Text = "toolStripButton3";
+            this.Pegar.Click += new System.EventHandler(this.Pegar_Click);
             // 
             // tabControl1
             // 
             this.tabControl1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 28);
+            this.tabControl1.Location = new System.Drawing.Point(0, 55);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(985, 481);
-            this.tabControl1.TabIndex = 5;
+            this.tabControl1.Size = new System.Drawing.Size(985, 454);
+            this.tabControl1.TabIndex = 6;
             // 
             // Form1
             // 
@@ -146,6 +229,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(985, 509);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
@@ -154,6 +238,8 @@
             this.tabPage1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -171,7 +257,14 @@
         private System.Windows.Forms.ToolStripMenuItem guardarComoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cerrarPestañaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
+        private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.ToolStripButton Guardar_Icono;
+        private System.Windows.Forms.ToolStripButton cntrlX;
+        private System.Windows.Forms.ToolStripButton CntrlY;
+        private System.Windows.Forms.ToolStripButton cortar;
+        private System.Windows.Forms.ToolStripButton copiar;
+        private System.Windows.Forms.ToolStripButton Pegar;
     }
 }
 
