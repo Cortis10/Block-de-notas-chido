@@ -46,7 +46,13 @@
             this.cortar = new System.Windows.Forms.ToolStripButton();
             this.copiar = new System.Windows.Forms.ToolStripButton();
             this.Pegar = new System.Windows.Forms.ToolStripButton();
+            this.Grande = new System.Windows.Forms.ToolStripButton();
+            this.chica = new System.Windows.Forms.ToolStripButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.Negrita = new System.Windows.Forms.ToolStripButton();
+            this.cursiva = new System.Windows.Forms.ToolStripButton();
+            this.Sub = new System.Windows.Forms.ToolStripButton();
+            this.tachado = new System.Windows.Forms.ToolStripButton();
             this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -79,7 +85,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(985, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(985, 30);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -147,10 +153,16 @@
             this.CntrlY,
             this.cortar,
             this.copiar,
-            this.Pegar});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 28);
+            this.Pegar,
+            this.Grande,
+            this.chica,
+            this.Negrita,
+            this.cursiva,
+            this.Sub,
+            this.tachado});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 30);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(985, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(985, 31);
             this.toolStrip1.TabIndex = 5;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -160,7 +172,7 @@
             this.Guardar_Icono.Image = ((System.Drawing.Image)(resources.GetObject("Guardar_Icono.Image")));
             this.Guardar_Icono.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Guardar_Icono.Name = "Guardar_Icono";
-            this.Guardar_Icono.Size = new System.Drawing.Size(29, 24);
+            this.Guardar_Icono.Size = new System.Drawing.Size(29, 28);
             this.Guardar_Icono.Click += new System.EventHandler(this.Guardar_Icono_Click);
             // 
             // cntrlX
@@ -213,15 +225,73 @@
             this.Pegar.Text = "toolStripButton3";
             this.Pegar.Click += new System.EventHandler(this.Pegar_Click);
             // 
+            // Grande
+            // 
+            this.Grande.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.Grande.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Grande.Name = "Grande";
+            this.Grande.Size = new System.Drawing.Size(41, 28);
+            this.Grande.Text = "Aa^";
+            this.Grande.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // chica
+            // 
+            this.chica.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.chica.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.chica.Name = "chica";
+            this.chica.Size = new System.Drawing.Size(38, 28);
+            this.chica.Text = "Aav";
+            this.chica.Click += new System.EventHandler(this.toolStripButton2_Click_2);
+            // 
             // tabControl1
             // 
             this.tabControl1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 55);
+            this.tabControl1.Location = new System.Drawing.Point(0, 61);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(985, 454);
+            this.tabControl1.Size = new System.Drawing.Size(985, 448);
             this.tabControl1.TabIndex = 6;
+            // 
+            // Negrita
+            // 
+            this.Negrita.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.Negrita.Image = ((System.Drawing.Image)(resources.GetObject("Negrita.Image")));
+            this.Negrita.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Negrita.Name = "Negrita";
+            this.Negrita.Size = new System.Drawing.Size(29, 28);
+            this.Negrita.Text = "toolStripButton1";
+            this.Negrita.Click += new System.EventHandler(this.Negrita_Click);
+            // 
+            // cursiva
+            // 
+            this.cursiva.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cursiva.Image = global::Block_de_notas_chdo.Properties.Resources._59377;
+            this.cursiva.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cursiva.Name = "cursiva";
+            this.cursiva.Size = new System.Drawing.Size(29, 28);
+            this.cursiva.Text = "__";
+            this.cursiva.Click += new System.EventHandler(this.cursiva_Click);
+            // 
+            // Sub
+            // 
+            this.Sub.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.Sub.Image = ((System.Drawing.Image)(resources.GetObject("Sub.Image")));
+            this.Sub.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Sub.Name = "Sub";
+            this.Sub.Size = new System.Drawing.Size(29, 28);
+            this.Sub.Text = "toolStripButton1";
+            this.Sub.Click += new System.EventHandler(this.Sub_Click);
+            // 
+            // tachado
+            // 
+            this.tachado.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tachado.Image = ((System.Drawing.Image)(resources.GetObject("tachado.Image")));
+            this.tachado.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tachado.Name = "tachado";
+            this.tachado.Size = new System.Drawing.Size(29, 28);
+            this.tachado.Text = "toolStripButton1";
+            this.tachado.Click += new System.EventHandler(this.tachado_Click);
             // 
             // Form1
             // 
@@ -265,6 +335,12 @@
         private System.Windows.Forms.ToolStripButton cortar;
         private System.Windows.Forms.ToolStripButton copiar;
         private System.Windows.Forms.ToolStripButton Pegar;
+        private System.Windows.Forms.ToolStripButton Grande;
+        private System.Windows.Forms.ToolStripButton chica;
+        private System.Windows.Forms.ToolStripButton Negrita;
+        private System.Windows.Forms.ToolStripButton cursiva;
+        private System.Windows.Forms.ToolStripButton Sub;
+        private System.Windows.Forms.ToolStripButton tachado;
     }
 }
 

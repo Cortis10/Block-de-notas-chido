@@ -93,9 +93,52 @@ namespace Block_de_notas_chdo
 
         private void NuevoRichTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (tabControl1.SelectedTab != null && !tabControl1.SelectedTab.Text.EndsWith("*"))
+            if (tabControl1.SelectedTab == null) return;
+
+            // 1. Colocar el asterisco de cambios pendientes en el título
+            if (!tabControl1.SelectedTab.Text.EndsWith("*"))
             {
                 tabControl1.SelectedTab.Text += "*";
+            }
+
+            RichTextBox rtb = sender as RichTextBox;
+            if (rtb == null) return;
+
+            // 2. Definir el diccionario de equivalencias (Texto -> Emoji)
+            // Puedes añadir todas las combinaciones extra que quieras aquí adentro
+            Dictionary<string, string> emojis = new Dictionary<string, string>
+            {
+                { ":)", "🙂" },
+                { "(:", "🙂" },
+                { ":(", "🙁" },
+                { ";)", "😉" },
+                { ":D", "😀" },
+                { "<3", "❤️" },
+                { ":P", "😛" }
+            };
+
+            // 3. Evaluar si lo que el usuario acaba de escribir coincide con un desencadenante
+            foreach (var par in emojis)
+            {
+                if (rtb.Text.Contains(par.Key))
+                {
+                    // Apagamos el evento para evitar que el programa entre en bucle infinito al modificar el .Text
+                    rtb.TextChanged -= NuevoRichTextBox_TextChanged;
+
+                    // Guardamos la posición original del cursor parpadeante
+                    int posicionCursor = rtb.SelectionStart;
+
+                    // Reemplazamos los caracteres por el emoji correspondiente
+                    rtb.Text = rtb.Text.Replace(par.Key, par.Value);
+
+                    // Recalculamos la posición del cursor para que no salte de golpe al inicio del documento
+                    rtb.SelectionStart = posicionCursor - (par.Key.Length - par.Value.Length);
+
+                    // Encendemos de nuevo el detector de escritura
+                    rtb.TextChanged += NuevoRichTextBox_TextChanged;
+
+                    break; // Salimos del ciclo al resolver la primera coincidencia encontrada
+                }
             }
         }
 
@@ -295,5 +338,139 @@ namespace Block_de_notas_chdo
             }
         }
 
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+            if (rtbActual == null) return;
+
+            Font fuenteActual = rtbActual.SelectionLength > 0 ? rtbActual.SelectionFont : rtbActual.Font;
+
+            if (fuenteActual != null)
+            {
+                //Calculamos el nuevo tamaño (sumamos 2 puntos al tamaño actual)
+                float nuevoTamaño = fuenteActual.Size + 2F;
+
+                if (nuevoTamaño <= 80F)
+                {
+                    Font nuevaFuente = new Font(fuenteActual.FontFamily, nuevoTamaño, fuenteActual.Style);
+
+                    if (rtbActual.SelectionLength > 0)
+                    {
+                        rtbActual.SelectionFont = nuevaFuente; // Aplica solo al texto sombreado
+                    }
+                    else
+                    {
+                        rtbActual.Font = nuevaFuente; // Aplica a toda la hoja si no hay selección
+                    }
+                }
+            }
+        }
+
+        private void toolStripButton2_Click_2(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+            if (rtbActual == null) return;
+
+            Font fuenteActual = rtbActual.SelectionLength > 0 ? rtbActual.SelectionFont : rtbActual.Font;
+
+            if (fuenteActual != null)
+            {
+                // Restamos 2 puntos al tamaño actual
+                float nuevoTamaño = fuenteActual.Size - 2F;
+
+                // Ponemos un límite mínimo (ej. 8 puntos) para que la letra no desaparezca
+                if (nuevoTamaño >= 8F)
+                {
+                    Font nuevaFuente = new Font(fuenteActual.FontFamily, nuevoTamaño, fuenteActual.Style);
+
+                    if (rtbActual.SelectionLength > 0)
+                    {
+                        rtbActual.SelectionFont = nuevaFuente;
+                    }
+                    else
+                    {
+                        rtbActual.Font = nuevaFuente;
+                    }
+                }
+            }
+        }
+
+        private void Negrita_Click(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+            if (rtbActual == null) return;
+
+            // Evaluamos la fuente actual del texto seleccionado o de la hoja entera
+            Font fuenteActual = rtbActual.SelectionLength > 0 ? rtbActual.SelectionFont : rtbActual.Font;
+
+            if (fuenteActual != null)
+            {
+                FontStyle nuevoEstilo = fuenteActual.Style ^ FontStyle.Bold;
+                Font nuevaFuente = new Font(fuenteActual.FontFamily, fuenteActual.Size, nuevoEstilo);
+
+                if (rtbActual.SelectionLength > 0)
+                    rtbActual.SelectionFont = nuevaFuente; // Cambia solo lo seleccionado
+                else
+                    rtbActual.Font = nuevaFuente; // Cambia toda la hoja si no hay selección
+            }
+        }
+
+        private void cursiva_Click(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+            if (rtbActual == null) return;
+
+            Font fuenteActual = rtbActual.SelectionLength > 0 ? rtbActual.SelectionFont : rtbActual.Font;
+
+            if (fuenteActual != null)
+            {
+                FontStyle nuevoEstilo = fuenteActual.Style ^ FontStyle.Italic;
+                Font nuevaFuente = new Font(fuenteActual.FontFamily, fuenteActual.Size, nuevoEstilo);
+
+                if (rtbActual.SelectionLength > 0)
+                    rtbActual.SelectionFont = nuevaFuente;
+                else
+                    rtbActual.Font = nuevaFuente;
+            }
+        }
+
+        private void Sub_Click(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+            if (rtbActual == null) return;
+
+            Font fuenteActual = rtbActual.SelectionLength > 0 ? rtbActual.SelectionFont : rtbActual.Font;
+
+            if (fuenteActual != null)
+            {
+                
+                FontStyle nuevoEstilo = fuenteActual.Style ^ FontStyle.Underline;
+                Font nuevaFuente = new Font(fuenteActual.FontFamily, fuenteActual.Size, nuevoEstilo);
+
+                if (rtbActual.SelectionLength > 0)
+                    rtbActual.SelectionFont = nuevaFuente;
+                else
+                    rtbActual.Font = nuevaFuente;
+            }
+        }
+
+        private void tachado_Click(object sender, EventArgs e)
+        {
+            RichTextBox rtbActual = ObtenerRichTextBoxActual();
+            if (rtbActual == null) return;
+
+            Font fuenteActual = rtbActual.SelectionLength > 0 ? rtbActual.SelectionFont : rtbActual.Font;
+
+            if (fuenteActual != null)
+            {
+                FontStyle nuevoEstilo = fuenteActual.Style ^ FontStyle.Strikeout;
+                Font nuevaFuente = new Font(fuenteActual.FontFamily, fuenteActual.Size, nuevoEstilo);
+
+                if (rtbActual.SelectionLength > 0)
+                    rtbActual.SelectionFont = nuevaFuente;
+                else
+                    rtbActual.Font = nuevaFuente;
+            }
+        }
     }
 }
