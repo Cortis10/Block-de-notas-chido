@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.IO;
 
 namespace Block_de_notas_chdo
 {
@@ -95,7 +96,6 @@ namespace Block_de_notas_chdo
         {
             if (tabControl1.SelectedTab == null) return;
 
-            // 1. Colocar el asterisco de cambios pendientes en el título
             if (!tabControl1.SelectedTab.Text.EndsWith("*"))
             {
                 tabControl1.SelectedTab.Text += "*";
@@ -104,44 +104,74 @@ namespace Block_de_notas_chdo
             RichTextBox rtb = sender as RichTextBox;
             if (rtb == null) return;
 
-            // 2. Definir el diccionario de equivalencias (Texto -> Emoji)
-            // Puedes añadir todas las combinaciones extra que quieras aquí adentro
-            Dictionary<string, string> emojis = new Dictionary<string, string>
+            Dictionary<string, byte[]> emojiIconos = new Dictionary<string, byte[]>
             {
-                { ":)", "🙂" },
-                { "(:", "🙂" },
-                { ":(", "🙁" },
-                { ";)", "😉" },
-                { ":D", "😀" },
-                { "<3", "❤️" },
-                { ":P", "😛" }
+                { ":)", Properties.Resources.Feliz },
+                { "(:", Properties.Resources.Feliz }
             };
 
-            // 3. Evaluar si lo que el usuario acaba de escribir coincide con un desencadenante
-            foreach (var par in emojis)
+            foreach (var par in emojiIconos)
             {
+                if (par.Value == null) continue;
+
                 if (rtb.Text.Contains(par.Key))
                 {
-                    // Apagamos el evento para evitar que el programa entre en bucle infinito al modificar el .Text
                     rtb.TextChanged -= NuevoRichTextBox_TextChanged;
 
-                    // Guardamos la posición original del cursor parpadeante
-                    int posicionCursor = rtb.SelectionStart;
+                    IDataObject portapapelesTemporal = Clipboard.GetDataObject();
 
-                    // Reemplazamos los caracteres por el emoji correspondiente
-                    rtb.Text = rtb.Text.Replace(par.Key, par.Value);
+                    using (MemoryStream ms = new MemoryStream(par.Value))
+                    {
+                        using (Icon iconoReal = new Icon(ms))
+                        {
+                            using (Bitmap bmpOriginal = iconoReal.ToBitmap())
+                            {
+                                Font fuenteActual = rtb.SelectionFont ?? rtb.Font;
+                                int tamanoEmoji = Math.Max((int)fuenteActual.Size + 6, 16);
 
-                    // Recalculamos la posición del cursor para que no salte de golpe al inicio del documento
-                    rtb.SelectionStart = posicionCursor - (par.Key.Length - par.Value.Length);
+                                using (Image imagenMiniatura = RedimensionarImagen(bmpOriginal, tamanoEmoji, tamanoEmoji))
+                                {
+                                    int index = rtb.Text.IndexOf(par.Key);
+                                    while (index != -1)
+                                    {
+                                        rtb.Select(index, par.Key.Length);
+                                        Clipboard.SetImage(imagenMiniatura);
+                                        rtb.Paste();
 
-                    // Encendemos de nuevo el detector de escritura
+                                        index = rtb.Text.IndexOf(par.Key);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (portapapelesTemporal != null)
+                    {
+                        Clipboard.SetDataObject(portapapelesTemporal);
+                    }
+
                     rtb.TextChanged += NuevoRichTextBox_TextChanged;
-
-                    break; // Salimos del ciclo al resolver la primera coincidencia encontrada
+                    break;
                 }
             }
+        
         }
+        // Función auxiliar para reducir el tamaño del icono sin perder calidad ni nitidez
+        private Image RedimensionarImagen(Image imagenOriginal, int ancho, int alto)
+        {
+            Bitmap imagenRedimensionada = new Bitmap(ancho, alto);
+            using (Graphics g = Graphics.FromImage(imagenRedimensionada))
+            {
+                // Configuraciones de renderizado de alta calidad para evitar pixeleado
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.SmoothingMode = SmoothingMode.HighQuality;
+                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                g.CompositingQuality = CompositingQuality.HighQuality;
 
+                g.DrawImage(imagenOriginal, 0, 0, ancho, alto);
+            }
+            return imagenRedimensionada;
+        }
 
 
 
