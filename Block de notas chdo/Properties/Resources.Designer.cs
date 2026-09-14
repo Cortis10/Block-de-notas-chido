@@ -69,25 +69,5 @@ namespace Block_de_notas_chdo.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap degradado_difuminado_morado_7986 {
-            get {
-                object obj = ResourceManager.GetObject("degradado-difuminado-morado-7986", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Feliz {
-            get {
-                object obj = ResourceManager.GetObject("Feliz", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }
