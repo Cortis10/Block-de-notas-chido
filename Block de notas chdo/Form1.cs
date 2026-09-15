@@ -52,6 +52,16 @@ namespace Block_de_notas_chdo
 
             return false;
         }
+
+        private void GuardarArchivo(string ruta)
+        {
+            if (!(tabControl1.SelectedTab?.Controls[0] is RichTextBox rtb)) return;
+
+            // Ya no necesitas reversiones porque rtb.Text contiene los atajos ocultos
+            System.IO.File.WriteAllText(ruta, rtb.Text, System.Text.Encoding.UTF8);
+
+            tabControl1.SelectedTab.Text = tabControl1.SelectedTab.Text.TrimEnd('*');
+        }
         private void guardar()
         {
             RichTextBox rtbActual = ObtenerRichTextBoxActual();
@@ -91,58 +101,125 @@ namespace Block_de_notas_chdo
             tabControl1.SelectedTab = nuevaPestaña;
         }
 
+        // Declara el diccionario a nivel de clase para no recrearlo en cada pulsación
+        // Diccionario que relaciona el texto con imágenes reales
+        private readonly Dictionary<string, Image> _imagenesEmojis = new Dictionary<string, Image>
+        {
+            { ":)", Properties.Resources.CaritaFeliz },
+            { ":(", Properties.Resources.CaritaTriste },
+            { ";)", Properties.Resources.CaritaLengua }
+        };
+
         private void NuevoRichTextBox_TextChanged(object sender, EventArgs e)
         {
             if (tabControl1.SelectedTab == null) return;
 
-            // 1. Colocar el asterisco de cambios pendientes en el título
             if (!tabControl1.SelectedTab.Text.EndsWith("*"))
             {
                 tabControl1.SelectedTab.Text += "*";
             }
 
-            RichTextBox rtb = sender as RichTextBox;
-            if (rtb == null) return;
+            if (!(sender is RichTextBox rtb)) return;
 
-            // 2. Definir el diccionario de equivalencias (Texto -> Emoji)
-            // Puedes añadir todas las combinaciones extra que quieras aquí adentro
-            Dictionary<string, string> emojis = new Dictionary<string, string>
-            {
-                { ":)", "🙂" },
-                { "(:", "🙂" },
-                { ":(", "🙁" },
-                { ";)", "😉" },
-                { ":D", "😀" },
-                { "<3", "❤️" },
-                { ":P", "😛" }
-            };
+            int cursorPos = rtb.SelectionStart;
+            if (cursorPos == 0) return;
 
-            // 3. Evaluar si lo que el usuario acaba de escribir coincide con un desencadenante
-            foreach (var par in emojis)
+            // Evaluamos únicamente los últimos caracteres inmediatos al cursor
+            foreach (var par in _imagenesEmojis) // <-- Asegúrate de que aquí diga _imagenesEmojis
             {
-                if (rtb.Text.Contains(par.Key))
+                int atajoLen = par.Key.Length;
+
+                // Si el cursor ha avanzado al menos la longitud del atajo
+                if (cursorPos >= atajoLen)
                 {
-                    // Apagamos el evento para evitar que el programa entre en bucle infinito al modificar el .Text
-                    rtb.TextChanged -= NuevoRichTextBox_TextChanged;
+                    // Extraer el fragmento recién tecleado
+                    string fragmento = rtb.Text.Substring(cursorPos - atajoLen, atajoLen);
 
-                    // Guardamos la posición original del cursor parpadeante
-                    int posicionCursor = rtb.SelectionStart;
+                    // AQUI ES DONDE VA EL CÓDIGO
+                    if (fragmento == par.Key)
+                    {
+                        rtb.TextChanged -= NuevoRichTextBox_TextChanged;
 
-                    // Reemplazamos los caracteres por el emoji correspondiente
-                    rtb.Text = rtb.Text.Replace(par.Key, par.Value);
+                        // --- Guardamos tu tipo de letra y color actuales antes de hacer nada ---
+                        Font fuenteNormal = rtb.SelectionFont ?? rtb.Font;
+                        Color colorNormal = rtb.SelectionColor;
 
-                    // Recalculamos la posición del cursor para que no salte de golpe al inicio del documento
-                    rtb.SelectionStart = posicionCursor - (par.Key.Length - par.Value.Length);
+                        // 1. Seleccionamos el texto del atajo y lo ocultamos
+                        rtb.Select(cursorPos - atajoLen, atajoLen);
+                        rtb.SelectionColor = rtb.BackColor;
+                        rtb.SelectionFont = new Font(fuenteNormal.FontFamily, 1);
 
-                    // Encendemos de nuevo el detector de escritura
-                    rtb.TextChanged += NuevoRichTextBox_TextChanged;
+                        // 2. Nos movemos justo después del texto oculto
+                        rtb.SelectionStart = cursorPos;
+                        rtb.SelectionLength = 0;
 
-                    break; // Salimos del ciclo al resolver la primera coincidencia encontrada
+                        // 3. Pegamos la imagen adaptada a la altura de tu fuente normal
+                        IDataObject portapapelesPrevio = Clipboard.GetDataObject();
+                        Image emojiPequeño = RedimensionarImagen(par.Value, fuenteNormal.Height);
+                        Clipboard.SetImage(emojiPequeño);
+
+                        rtb.Paste();
+
+                        if (portapapelesPrevio != null) Clipboard.SetDataObject(portapapelesPrevio);
+
+                        // --- 4. LA SOLUCIÓN: FORZAR AL CURSOR A SALTAR LA IMAGEN ---
+                        // Una imagen en RichTextBox cuenta como 1 espacio exacto. 
+                        // Sumamos 1 al cursorPos original para ponernos a la derecha de la imagen.
+                        rtb.SelectionStart = cursorPos + 1;
+                        rtb.SelectionLength = 0; // Aseguramos que la imagen no se quede seleccionada
+
+                        // 5. Ahora sí, aplicamos la fuente y color originales
+                        rtb.SelectionFont = fuenteNormal;
+                        rtb.SelectionColor = colorNormal;
+
+                        rtb.TextChanged += NuevoRichTextBox_TextChanged;
+                        break;
+                    }
                 }
             }
         }
 
+        private void RenderizarImagenesAlAbrir(RichTextBox rtb)
+        {
+            // Apagamos el evento para no generar falsos positivos mientras modificamos el texto
+            rtb.TextChanged -= NuevoRichTextBox_TextChanged;
 
+            foreach (var par in _imagenesEmojis)
+            {
+                int startIndex = 0;
+
+                while (startIndex < rtb.TextLength)
+                {
+                    int index = rtb.Text.IndexOf(par.Key, startIndex);
+                    if (index == -1) break;
+
+                    // Seleccionar el atajo
+                    rtb.Select(index, par.Key.Length);
+
+                    // Ocultarlo
+                    rtb.SelectionColor = rtb.BackColor;
+                    rtb.SelectionFont = new Font(rtb.Font.FontFamily, 1);
+
+                    // Pegar la imagen a la derecha adaptada al tamaño
+                    rtb.SelectionStart = index + par.Key.Length;
+                    rtb.SelectionLength = 0;
+
+                    IDataObject portapapelesPrevio = Clipboard.GetDataObject();
+
+                    // Redimensionamos usando la fuente actual del documento
+                    Image emojiPequeño = RedimensionarImagen(par.Value, rtb.Font.Height);
+                    Clipboard.SetImage(emojiPequeño);
+
+                    rtb.Paste();
+                    if (portapapelesPrevio != null) Clipboard.SetDataObject(portapapelesPrevio);
+
+                    // Avanzar el índice de búsqueda
+                    startIndex = index + par.Key.Length;
+                }
+            }
+
+            rtb.TextChanged += NuevoRichTextBox_TextChanged;
+        }
 
 
 
@@ -174,7 +251,9 @@ namespace Block_de_notas_chdo
             if (res == DialogResult.OK)
             {
                 rtbActual.Text = File.ReadAllText(ofd.FileName);
-                // Al abrirlo está sincronizado con el disco, va sin asterisco
+
+                RenderizarImagenesAlAbrir(rtbActual);
+
                 tabControl1.SelectedTab.Text = Path.GetFileName(ofd.FileName);
                 tabControl1.SelectedTab.Tag = ofd.FileName;
             }
@@ -230,6 +309,23 @@ namespace Block_de_notas_chdo
 
             // Si ya no quedan pestañas en el programa, cerramos la app por completo
             if (tabControl1.TabPages.Count == 0) Close();
+        }
+
+        private Image RedimensionarImagen(Image imagenOriginal, int alturaDeseada)
+        {
+            // Calculamos el ancho para que no se deforme
+            int anchuraDeseada = (imagenOriginal.Width * alturaDeseada) / imagenOriginal.Height;
+
+            Bitmap imagenRedimensionada = new Bitmap(anchuraDeseada, alturaDeseada);
+
+            using (Graphics g = Graphics.FromImage(imagenRedimensionada))
+            {
+                // Mejoramos la calidad visual al hacerla pequeña
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.DrawImage(imagenOriginal, 0, 0, anchuraDeseada, alturaDeseada);
+            }
+
+            return imagenRedimensionada;
         }
 
         private void guardarToolStripMenuItem_Click(object sender, EventArgs e)
